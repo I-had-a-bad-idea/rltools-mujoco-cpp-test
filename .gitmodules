@@ -1,0 +1,6 @@
+[submodule "external/rl-tools"]
+	path = external/rl-tools
+	url = https://github.com/rl-tools/rl-tools
+[submodule "external/mujoco"]
+	path = external/mujoco
+	url = https://github.com/google-deepmind/mujoco.git
