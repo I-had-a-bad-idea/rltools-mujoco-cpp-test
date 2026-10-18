@@ -1,7 +1,7 @@
 
 <!-- AI generated model for Mujoco (moving cart left/right to balance pole) -->
 <mujoco model="simple_cartpole">
-    <compiler assetdir="." coordination="global" inertiafromgeom="true"/>
+    <compiler assetdir="." inertiafromgeom="true"/>
     
     <option timestep="0.02" integrator="RK4" gravity="0 0 -9.81"/>
 

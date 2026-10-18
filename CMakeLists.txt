@@ -24,3 +24,12 @@ target_include_directories(test PRIVATE
 )
 
 target_link_libraries(test PRIVATE mujoco)
+
+if(WIN32)
+    add_custom_command(TARGET test POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "$<TARGET_FILE:mujoco>"
+            "$<TARGET_FILE_DIR:test>"
+        VERBATIM
+    )
+endif()
