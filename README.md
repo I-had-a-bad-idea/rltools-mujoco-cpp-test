@@ -13,8 +13,7 @@ make init
 Configure and build the application (MuJoCo is built automatically):
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
+make configure
 ```
 
 On Windows, the build copies `mujoco.dll` beside `test.exe` so the executable can load it.
