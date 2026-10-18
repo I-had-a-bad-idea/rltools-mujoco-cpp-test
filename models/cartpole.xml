@@ -1,0 +1,35 @@
+
+<!-- AI generated model for Mujoco (moving cart left/right to balance pole) -->
+<mujoco model="simple_cartpole">
+    <compiler assetdir="." coordination="global" inertiafromgeom="true"/>
+    
+    <option timestep="0.02" integrator="RK4" gravity="0 0 -9.81"/>
+
+    <worldbody>
+        <!-- Der Boden -->
+        <geom name="floor" type="plane" pos="0 0 0" size="10 10 0.1" rgba="0.8 0.8 0.8 1"/>
+        
+        <!-- Die Schiene (visuell) -->
+        <geom name="rail" type="capsule" pos="0 0 1" size="0.02 2" zaxis="0 1 0" rgba="0.3 0.3 0.3 1"/>
+
+        <!-- Der Wagen (Cart) -->
+        <body name="cart" pos="0 0 1">
+            <!-- Slider-Joint erlaubt Bewegung nur auf der X-Achse -->
+            <joint name="slider" type="slide" axis="1 0 0" range="-2.5 2.5" limited="true" damping="1.0"/>
+            <geom name="cart_geom" type="box" size="0.2 0.1 0.1" rgba="0 0.7 0 1"/>
+
+            <!-- Die Stange (Pole) -->
+            <body name="pole" pos="0 0 0">
+                <!-- Hinge-Joint erlaubt Rotation auf der Y-Achse -->
+                <joint name="hinge" type="hinge" axis="0 1 0" damping="0.1"/>
+                <!-- Die Geometrie ist nach oben verschoben (0.5 m lang) -->
+                <geom name="pole_geom" type="capsule" fromto="0 0 0 0 0 0.6" size="0.04" rgba="0 0 1 1"/>
+            </body>
+        </body>
+    </worldbody>
+
+    <!-- Der Motor, den das neuronale Netzwerk steuert -->
+    <actuator>
+        <motor name="move_cart" joint="slider" gear="15" ctrlrange="-1 1" ctrllimited="true"/>
+    </actuator>
+</mujoco>
