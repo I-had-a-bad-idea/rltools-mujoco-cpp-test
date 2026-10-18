@@ -39,6 +39,13 @@ void MujocoEnv::step(float action) {
     mj_step(model, data);
 }
 
+float MujocoEnv::reward(float cart_x, float pole_angle, float action) {
+    return 1.0f
+        - 1.0f * pole_angle * pole_angle
+        - 0.1f * cart_x * cart_x
+        - 0.001f * action * action;
+}
+
 void MujocoEnv::close() {
     std::printf("Simulation complete.\n");
     std::printf("Simulation time: %.3f s\n", data->time);
