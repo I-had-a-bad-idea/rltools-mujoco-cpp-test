@@ -1,21 +1,22 @@
 #include "mujoco_env.hpp"
 
 void MujocoEnv::load(const char* xml_path) {
+    close();
+
     char error[1024] = {};
-    mjModel* model = mj_loadXML(xml_path, nullptr, error, sizeof(error));
+    model = mj_loadXML(xml_path, nullptr, error, sizeof(error));
     if (!model) {
         throw std::runtime_error(error);
         return;
     }
 
-    mjData* data = mj_makeData(model);
-
+    this->data = mj_makeData(model);
     slider_id = mj_name2id(model, mjOBJ_JOINT, "slider");
     hinge_id = mj_name2id(model, mjOBJ_JOINT, "hinge");
 
-    if (!data || slider_id < 0 || hinge_id < 0) {
+    if (!this->data || slider_id < 0 || hinge_id < 0) {
         throw std::runtime_error("Mujoco data or joints could not be loaded");
-        mj_deleteModel(model);
+        close();
         return;
     }
 }
@@ -47,8 +48,11 @@ float MujocoEnv::reward(float cart_x, float pole_angle, float action) {
 }
 
 void MujocoEnv::close() {
-    std::printf("Simulation complete.\n");
-    std::printf("Simulation time: %.3f s\n", data->time);
+    if (data) {
+        std::printf("Simulation complete.\n");
+        std::printf("Simulation time: %.3f s\n", data->time);
+    }
+
     if (data) mj_deleteData(data);
     if (model) mj_deleteModel(model);
 

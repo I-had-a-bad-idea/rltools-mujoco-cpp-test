@@ -16,10 +16,12 @@ add_subdirectory(external/mujoco EXCLUDE_FROM_ALL)
 
 add_executable(test
     src/main.cpp
+    src/mujoco_env.cpp
 )
 
 # RL-Tools is primarily header-based.
 target_include_directories(test PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/external/rl-tools/include
 )
 
