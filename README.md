@@ -25,14 +25,14 @@ make build
 
 ## Running
 
-From PowerShell on Windows:
+Train a policy, saving its weights to `policy.dat`:
 
 ```bash
-.\build\Release\test.exe models\cartpole.xml
+.\build\Release\test.exe models\cartpole.xml train 100 policy.dat
 ```
 
-On Linux or macOS:
+Run/evaluate a previously trained policy:
 
 ```bash
-./build/test models/cartpole.xml
+.\build\Release\test.exe models\cartpole.xml run 5 policy.dat
 ```

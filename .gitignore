@@ -1,3 +1,6 @@
+# Neural network files
+*.dat
+
 # Prerequisites
 *.d
 

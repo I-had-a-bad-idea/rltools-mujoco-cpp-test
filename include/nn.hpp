@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <string>
+
+class MujocoEnv;
 
 class NeuralNetwork {
     struct Impl;
@@ -11,4 +14,8 @@ class NeuralNetwork {
         ~NeuralNetwork();
 
         void init();
+        float train(MujocoEnv& environment, unsigned int episodes, unsigned int max_steps);
+        float run(MujocoEnv& environment, unsigned int episodes, unsigned int max_steps);
+        void save(const std::string& path) const;
+        void load(const std::string& path);
 };
