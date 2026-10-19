@@ -1,7 +1,6 @@
 #include <mujoco/mujoco.h>
 
-#include <rl_tools/operations/cpu.h>
-
+#include "nn.hpp"
 #include "mujoco_env.hpp"
 
 #include <stdio.h>
@@ -16,6 +15,9 @@ int main(int argc, char** argv) {
 
     MujocoEnv mujoco_env;
     mujoco_env.load(argv[1]);
+    
+    NeuralNetwork nn;
+    nn.init();
 
     for (int i = 0; i < 1000; ++i) {
         mujoco_env.step(0.0f);

@@ -17,6 +17,7 @@ add_subdirectory(external/mujoco EXCLUDE_FROM_ALL)
 add_executable(test
     src/main.cpp
     src/mujoco_env.cpp
+    src/nn.cpp
 )
 
 # RL-Tools is primarily header-based.
