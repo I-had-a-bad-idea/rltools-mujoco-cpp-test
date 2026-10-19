@@ -1,5 +1,9 @@
 #include "mujoco_env.hpp"
 
+MujocoEnv::~MujocoEnv() {
+    close();
+}
+
 void MujocoEnv::load(const char* xml_path) {
     close();
 
@@ -7,7 +11,6 @@ void MujocoEnv::load(const char* xml_path) {
     model = mj_loadXML(xml_path, nullptr, error, sizeof(error));
     if (!model) {
         throw std::runtime_error(error);
-        return;
     }
 
     this->data = mj_makeData(model);
@@ -15,10 +18,22 @@ void MujocoEnv::load(const char* xml_path) {
     hinge_id = mj_name2id(model, mjOBJ_JOINT, "hinge");
 
     if (!this->data || slider_id < 0 || hinge_id < 0) {
-        throw std::runtime_error("Mujoco data or joints could not be loaded");
         close();
-        return;
+        throw std::runtime_error("Mujoco data or joints could not be loaded");
     }
+}
+
+void MujocoEnv::reset(float cart_position, float cart_velocity, float pole_angle, float pole_velocity) {
+    if (!model || !data) {
+        throw std::runtime_error("MuJoCo environment is not loaded");
+    }
+
+    mj_resetData(model, data);
+    data->qpos[model->jnt_qposadr[slider_id]] = cart_position;
+    data->qvel[model->jnt_dofadr[slider_id]] = cart_velocity;
+    data->qpos[model->jnt_qposadr[hinge_id]] = pole_angle;
+    data->qvel[model->jnt_dofadr[hinge_id]] = pole_velocity;
+    mj_forward(model, data);
 }
 
 Observation MujocoEnv::observe() const {
