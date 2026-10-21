@@ -37,6 +37,13 @@ Run/evaluate a previously trained policy:
 .\build\Release\test.exe models\cartpole.xml run 5 policy.dat
 ```
 
+When using the default five evaluation episodes, the policy path can be supplied
+directly after `run`:
+
+```bash
+.\build\Release\test.exe models\cartpole.xml run policy.dat
+```
+
 The episode count and policy path are optional. Training defaults to 100 episodes;
 evaluation defaults to 5. If no mode is specified, the executable trains a new policy.
 Training uses RLTools' Twin Delayed DDPG (TD3) algorithm with the included MuJoCo
@@ -46,3 +53,5 @@ Episodes end when the pole falls, the cart leaves the track, or the 1000-step li
 is reached. Policies are saved as binary files compatible with this network's
 architecture. Existing policies from older versions are not compatible; train a
 new policy before evaluating them, and retrain after changing the layer dimensions.
+The reported MuJoCo simulation time accumulates across episode resets; training and
+evaluation also print wall-clock time, which includes RL inference and training work.

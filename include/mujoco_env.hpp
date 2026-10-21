@@ -13,6 +13,7 @@ struct Observation {
 class MujocoEnv {
     mjModel* model = nullptr;
     mjData* data = nullptr;
+    double accumulated_simulation_time = 0.0;
 
     int slider_id = -1;
     int hinge_id = -1;

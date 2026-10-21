@@ -28,6 +28,7 @@ void MujocoEnv::reset(float cart_position, float cart_velocity, float pole_angle
         throw std::runtime_error("MuJoCo environment is not loaded");
     }
 
+    accumulated_simulation_time += data->time;
     mj_resetData(model, data);
     data->qpos[model->jnt_qposadr[slider_id]] = cart_position;
     data->qvel[model->jnt_dofadr[slider_id]] = cart_velocity;
@@ -80,7 +81,7 @@ float MujocoEnv::reward(float cart_x, float pole_angle, float action) {
 void MujocoEnv::close() {
     if (data) {
         std::printf("Simulation complete.\n");
-        std::printf("Simulation time: %.3f s\n", data->time);
+        std::printf("Total simulation time: %.3f s\n", accumulated_simulation_time + data->time);
     }
 
     if (data) mj_deleteData(data);
@@ -88,4 +89,7 @@ void MujocoEnv::close() {
 
     data = nullptr;
     model = nullptr;
+    accumulated_simulation_time = 0.0;
+    slider_id = -1;
+    hinge_id = -1;
 }

@@ -17,6 +17,7 @@
 #include <array>
 #include <cstdint>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <stdexcept>
 
@@ -236,6 +237,7 @@ float NeuralNetwork::Impl::train(MujocoEnv& environment, unsigned int episodes, 
     TI step_i = 0;
     unsigned int completed_episodes = 0;
     double total_return = 0;
+    const unsigned int progress_interval = std::max(1U, episodes / 10);
     while (completed_episodes < episodes) {
         if (step_i < WARMUP_STEPS) {
             rlt::step<0>(device, off_policy_runner, exploration_policy, exploration_buffer, rng);
@@ -268,6 +270,10 @@ float NeuralNetwork::Impl::train(MujocoEnv& environment, unsigned int episodes, 
         if (rlt::get(off_policy_runner.truncated, 0, 0)) {
             total_return += rlt::get(off_policy_runner.episode_return, 0, 0);
             ++completed_episodes;
+            if (completed_episodes % progress_interval == 0 || completed_episodes == episodes) {
+                std::cout << "Training episodes: " << completed_episodes << '/' << episodes
+                          << ", mean return: " << total_return / completed_episodes << '\n';
+            }
         }
         ++step_i;
     }
