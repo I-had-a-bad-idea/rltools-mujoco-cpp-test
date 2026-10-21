@@ -37,6 +37,10 @@ void MujocoEnv::reset(float cart_position, float cart_velocity, float pole_angle
 }
 
 Observation MujocoEnv::observe() const {
+    if (!model || !data) {
+        throw std::runtime_error("MuJoCo environment is not loaded");
+    }
+
     const int sx = model->jnt_qposadr[slider_id];
     const int sv = model->jnt_dofadr[slider_id];
     const int ha = model->jnt_qposadr[hinge_id];
@@ -51,8 +55,19 @@ Observation MujocoEnv::observe() const {
 }
 
 void MujocoEnv::step(float action) {
-    data->ctrl[0] = action;
+    if (!model || !data) {
+        throw std::runtime_error("MuJoCo environment is not loaded");
+    }
+
+    data->ctrl[0] = action < -1.0f ? -1.0f : (action > 1.0f ? 1.0f : action);
     mj_step(model, data);
+}
+
+float MujocoEnv::timestep() const {
+    if (!model) {
+        throw std::runtime_error("MuJoCo environment is not loaded");
+    }
+    return static_cast<float>(model->opt.timestep);
 }
 
 float MujocoEnv::reward(float cart_x, float pole_angle, float action) {

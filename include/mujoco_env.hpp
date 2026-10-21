@@ -29,6 +29,7 @@ class MujocoEnv {
         Observation observe() const;
         void step(float action);
         float reward(float cart_x, float pole_angle, float action);
+        float timestep() const;
 
         void close();
 };
