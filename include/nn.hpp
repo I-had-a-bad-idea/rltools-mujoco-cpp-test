@@ -12,6 +12,8 @@ class NeuralNetwork {
     public:
         NeuralNetwork();
         ~NeuralNetwork();
+        NeuralNetwork(const NeuralNetwork&) = delete;
+        NeuralNetwork& operator=(const NeuralNetwork&) = delete;
 
         void init();
         float train(MujocoEnv& environment, unsigned int episodes, unsigned int max_steps);
